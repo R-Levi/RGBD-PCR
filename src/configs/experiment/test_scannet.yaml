@@ -1,0 +1,95 @@
+# @package _global_
+dataset:
+    name: scannet
+    num_views: 2
+    view_spacing: 5
+    img_dim: [120,160]
+    match_pairs_root: "/home/levi/Data_work/PCD/match_pairs"
+    num_workers: 4
+    overfit: False
+    batch_size: 1
+    num_stages: 4
+    voxel_size: 0.025
+    init_radius: 0.0625
+    img_scale: 4
+    window_size: 5
+model:
+    name: GeoRGBD
+    gt_Rt: True
+    num_views: 2
+    use_gt_vp: False
+    voxel_size: 0.025
+    Rt_augmentation: False
+    num_points_in_patch: 48
+    ground_truth_matching_radius: 0.05
+    img_scale: 4
+    num_sinkhorn_iterations: 100
+    finetune_superglue: False
+
+    backbone:
+        input_dim: 1
+        output_dim: 256
+        init_dim: 64
+        kernel_size: 15
+        init_radius: 0.0625
+        init_sigma: 0.05
+        group_norm: 32
+        num_stages: 4
+        init_voxel_size: 0.025
+
+    geotransformer:
+        input_dim: 1024
+        output_dim: 256
+        hidden_dim: 256
+        num_heads: 4
+        blocks: [ 'self', 'cross', 'self', 'cross', 'self', 'cross' ]
+        sigma_d: 0.2
+        sigma_a: 15
+        angle_k: 3
+        reduction_a: 'max'
+
+    coarse_matching:
+        num_targets: 128
+        overlap_threshold: 0.1
+        num_correspondences: 256
+        dual_normalization: True
+
+    fine_matching:
+        topk: 3
+        acceptance_radius: 0.1
+        mutual: True
+        confidence_threshold: 0.05
+        use_dustbin: False
+        use_global_score: False
+        correspondence_threshold: 3
+        correspondence_limit:
+        num_refinement_steps: 5
+
+    alignment:
+        algorithm: weighted_procrustes
+        num_correspodances: 200 # 200 in each direction
+        point_ratio: 1.0
+        num_seeds: 1
+        loss_weighting: lowe
+
+    v2g_transfer:
+        method: simsiam
+        weight: none
+
+test:
+#    checkpoint:
+#        name: "rgbdpcl"
+#        time: "04211145"
+#        epoch: 0
+#        step: -1
+#    split: test
+    checkpoint:
+        name: "rgbdpcl_50"
+        time: "04211145"
+        epoch: 0
+        step: -1
+    split: test
+
+
+experiment:
+    name: test_sacnnet

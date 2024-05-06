@@ -1,0 +1,13 @@
+name: 3DMatch
+num_views: 2
+view_spacing: 20
+img_dim: [120,160]
+match_pairs_root: "/home/levi/Data_work/PCD/match_pairs"
+num_workers: 8
+overfit: False
+batch_size: 1
+num_stages: 4
+voxel_size: 0.025
+init_radius: 0.0625
+img_scale: 4
+window_size: 5

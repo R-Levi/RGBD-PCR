@@ -1,0 +1,8 @@
+name: ScanNet
+num_views: 2
+view_spacing: 2
+img_dim: 128
+match_pairs_root: "/home/levi/Data_work/PCD/match_pairs"
+num_workers: 4
+overfit: False
+batch_size: 8
